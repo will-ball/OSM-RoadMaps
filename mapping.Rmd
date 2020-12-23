@@ -21,14 +21,16 @@ library(beepr)
 This document explains how to create line maps using OSM data and ggplot2. First, we collect Open Street Map data on main streets, small streets and any rivers that we want to plot. This uses the osmdata package.
 
 ```{r Data}
-streets <- getbb("Dublin") %>%
+area <- "Aberdeen, Scotland" # Insert city/area name here within speech marks
+
+streets <- getbb(area) %>%
   opq() %>%
   add_osm_feature(key = "highway", 
                   value = c("motorway", "primary", 
                             "secondary", "tertiary")) %>%
   osmdata_sf()
 
-small_streets <- getbb("Dublin") %>%
+small_streets <- getbb(area) %>%
   opq() %>%
   add_osm_feature(key = "highway", 
                   value = c("residential", "living_street",
@@ -36,41 +38,42 @@ small_streets <- getbb("Dublin") %>%
                             "service", "footway")) %>%
   osmdata_sf()
 
-river <- getbb("Dublin") %>%
+river <- getbb(area) %>%
   opq() %>%
   add_osm_feature(key = "waterway", value = "river") %>%
   osmdata_sf()
 
-getbb("Dublin")
+a <- getbb(area) # Creates an object that lists the boundary box limits for the area
 beep("coin")
 ```
 
 ## Plotting
 
-Use the x & y co-ordinates from the last getbb() call to populate the xlim & ylim parts of coord_sf()
+Here we plot the data extracted above. Each one forms a 'geom_sf'. We can specify the colour, size and opacity (alpha).
 
 ```{r plot}
 (p <- ggplot() +
   geom_sf(data = streets$osm_lines,
           inherit.aes = FALSE,
           color = "black",
-          size = .4,
-          alpha = .8) +
+          size = .3,
+          alpha = .6) +
   geom_sf(data = small_streets$osm_lines,
           inherit.aes = FALSE,
           color = "black",
-          size = .4,
-          alpha = .6) +
+          size = .2,
+          alpha = .4) +
   geom_sf(data = river$osm_lines,
           inherit.aes = FALSE,
-          color = "black",
-          size = .2,
-          alpha = .5) +
-  coord_sf(xlim = c(-6.38, -6.11), 
-           ylim = c(53.29, 53.41),
+          color = "light blue",
+          size = .3,
+          alpha = .6) +
+  coord_sf(xlim = c(a[1], a[3]), 
+           ylim = c(a[2], a[4]),
            expand = FALSE) +
     theme_void()
 )
+beep("coin")
 ```
 
 ## Save
@@ -78,7 +81,7 @@ Use the x & y co-ordinates from the last getbb() call to populate the xlim & yli
 Now to save the plot. Don't forget to change the filename
 
 ``` {r save}
-ggsave(filename = "Dublin.png", plot = p, height = 6, width = 6, units = "in", dpi = 300)
+ggsave(filename = "Aberdeen.png", plot = p, height = 3, width = 3, units = "in", dpi = 500)
 
 beep("coin")
 ```
