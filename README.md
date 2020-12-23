@@ -16,13 +16,18 @@ We're going to use the {osmdata} package to access Open Street Map Data and plot
 ### Some Examples
 
 Aberdeen
-![Aberdeen](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Aberdeen.png?raw=true)
+
+<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Aberdeen.png?raw=true" width="500" height="500">
 
 Dublin
-![Dublin](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Dublin.png?raw=true)
+
+<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Dublin.png?raw=true" width="500" height="500">
 
 London
-![London](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/London.png?raw=true)
+
+
+<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/London.png?raw=true" width="500" height="500">
 
 Edinburgh
-![Edinburgh](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Edinburgh.png?raw=true)
+
+<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/Edinburgh.png?raw=true" width="500" height="500">
