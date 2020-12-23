@@ -1,0 +1,84 @@
+---
+title: "Line Street Maps - OSM Data"
+author: "Will Ball"
+date: "22/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+``` {r setup, echo = FALSE}
+library(osmdata)
+library(tidyverse)
+library(beepr)
+```
+
+## Line Street Maps
+
+This document explains how to create line maps using OSM data and ggplot2. First, we collect Open Street Map data on main streets, small streets and any rivers that we want to plot. This uses the osmdata package.
+
+```{r Data}
+streets <- getbb("Dublin") %>%
+  opq() %>%
+  add_osm_feature(key = "highway", 
+                  value = c("motorway", "primary", 
+                            "secondary", "tertiary")) %>%
+  osmdata_sf()
+
+small_streets <- getbb("Dublin") %>%
+  opq() %>%
+  add_osm_feature(key = "highway", 
+                  value = c("residential", "living_street",
+                            "unclassified",
+                            "service", "footway")) %>%
+  osmdata_sf()
+
+river <- getbb("Dublin") %>%
+  opq() %>%
+  add_osm_feature(key = "waterway", value = "river") %>%
+  osmdata_sf()
+
+getbb("Dublin")
+beep("coin")
+```
+
+## Plotting
+
+Use the x & y co-ordinates from the last getbb() call to populate the xlim & ylim parts of coord_sf()
+
+```{r plot}
+(p <- ggplot() +
+  geom_sf(data = streets$osm_lines,
+          inherit.aes = FALSE,
+          color = "black",
+          size = .4,
+          alpha = .8) +
+  geom_sf(data = small_streets$osm_lines,
+          inherit.aes = FALSE,
+          color = "black",
+          size = .4,
+          alpha = .6) +
+  geom_sf(data = river$osm_lines,
+          inherit.aes = FALSE,
+          color = "black",
+          size = .2,
+          alpha = .5) +
+  coord_sf(xlim = c(-6.38, -6.11), 
+           ylim = c(53.29, 53.41),
+           expand = FALSE) +
+    theme_void()
+)
+```
+
+## Save
+
+Now to save the plot. Don't forget to change the filename
+
+``` {r save}
+ggsave(filename = "Dublin.png", plot = p, height = 6, width = 6, units = "in", dpi = 300)
+
+beep("coin")
+```
