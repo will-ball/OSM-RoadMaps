@@ -33,4 +33,4 @@ Edinburgh
 
 Lusaka
 
-<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/LusakaDark.png?raw=true" width="500" height="500>
+<img src="https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/LusakaDark.png?raw=true" width="500" height="500">
