@@ -9,19 +9,35 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Line Street Maps
 
-``` {r setup, echo = FALSE}
+This document explains how to create line street maps using OSM data and ggplot2. It's based on [this great tutorial by Christian Burkhart](https://ggplot2tutor.com/streetmaps/streetmaps/).
+
+There are four general steps required:
+
+1. Load in the necessary packages
+2. Store the data in objects
+3. Plot the line objects
+4. Save the plot
+
+## The Packages
+
+We're using data from Open Street Map which can be downloaded using the {osmdata} package. We also need {ggplot2} and the {magrittr} forward pipe operator (`%>%`) so we might as well call the whole {tidyverse} package.Finally, some of these functions take a little while (depending on the size of the city/area you are plotting & how detailed/large the saved file is) so I've also loaded {beepr} which is a package with a single function, `beep()`, that you can add to the end of your code which makes a handy noise once it's complete.
+
+If you don't have these packages already installed, you should use `install.packages("packagename")` before loading them using the library function.
+
+``` {r packages, warning = FALSE, results = FALSE, eval = FALSE}
 library(osmdata)
 library(tidyverse)
 library(beepr)
 ```
 
-## Line Street Maps
+## The Data
 
-This document explains how to create line maps using OSM data and ggplot2. First, we collect Open Street Map data on main streets, small streets and any rivers that we want to plot. This uses the osmdata package.
+First, we collect Open Street Map data on main streets, small streets and any rivers that we want to plot.
 
-```{r Data}
-area <- "Aberdeen, Scotland" # Insert city/area name here within speech marks
+```{r Data, eval = FALSE}
+area <- "Paris, France" # Insert city/area name here within speech marks
 
 streets <- getbb(area) %>%
   opq() %>%
@@ -47,41 +63,43 @@ a <- getbb(area) # Creates an object that lists the boundary box limits for the 
 beep("coin")
 ```
 
-## Plotting
+## The Plot
 
-Here we plot the data extracted above. Each one forms a 'geom_sf'. We can specify the colour, size and opacity (alpha).
+Here we plot the data extracted above. Each one forms a 'geom_sf'. We can specify the colour, size and opacity (alpha) of each of the lines as well as the.
 
-```{r plot}
+```{r plot, eval = FALSE}
 (p <- ggplot() +
   geom_sf(data = streets$osm_lines,
           inherit.aes = FALSE,
-          color = "black",
-          size = .3,
+          color = "white",
+          size = .4,
           alpha = .6) +
   geom_sf(data = small_streets$osm_lines,
           inherit.aes = FALSE,
-          color = "black",
+          color = "#D14702",
           size = .2,
           alpha = .4) +
   geom_sf(data = river$osm_lines,
           inherit.aes = FALSE,
-          color = "light blue",
+          color = "#0062FF",
           size = .3,
-          alpha = .6) +
+          alpha = .8) +
   coord_sf(xlim = c(a[1], a[3]), 
            ylim = c(a[2], a[4]),
            expand = FALSE) +
-    theme_void()
+    theme_void() +
+   theme(plot.background = element_rect(fill = "#282828")) # Remove this line if you want the background blank
 )
 beep("coin")
 ```
+![](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/ParisDark.png?raw=true){width=50%}
 
 ## Save
 
-Now to save the plot. Don't forget to change the filename
+Now to save the plot. Don't forget to change the file name.
 
-``` {r save}
-ggsave(filename = "Aberdeen.png", plot = p, height = 3, width = 3, units = "in", dpi = 500)
+``` {r save, eval = FALSE}
+ggsave(filename = "ParisDark.png", plot = p, height = 3, width = 3, units = "in", dpi = 500)
 
 beep("coin")
 ```
