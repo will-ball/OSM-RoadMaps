@@ -26,7 +26,7 @@ We're using data from Open Street Map which can be downloaded using the {osmdata
 
 If you don't have these packages already installed, you should use `install.packages("packagename")` before loading them using the library function.
 
-``` {r packages, echo = FALSE}
+``` {r packages, warning = FALSE, results = FALSE, eval = FALSE}
 library(osmdata)
 library(tidyverse)
 library(beepr)
@@ -36,7 +36,7 @@ library(beepr)
 
 First, we collect Open Street Map data on main streets, small streets and any rivers that we want to plot.
 
-```{r Data}
+```{r Data, eval = FALSE}
 area <- "Paris, France" # Insert city/area name here within speech marks
 
 streets <- getbb(area) %>%
@@ -67,7 +67,7 @@ beep("coin")
 
 Here we plot the data extracted above. Each one forms a 'geom_sf'. We can specify the colour, size and opacity (alpha) of each of the lines as well as the.
 
-```{r plot}
+```{r plot, eval = FALSE}
 (p <- ggplot() +
   geom_sf(data = streets$osm_lines,
           inherit.aes = FALSE,
@@ -88,16 +88,17 @@ Here we plot the data extracted above. Each one forms a 'geom_sf'. We can specif
            ylim = c(a[2], a[4]),
            expand = FALSE) +
     theme_void() +
-   theme(plot.background = element_rect(fill = "#282828"))
+   theme(plot.background = element_rect(fill = "#282828")) # Remove this line if you want the background blank
 )
 beep("coin")
 ```
+![](https://github.com/will-ball/OSM-RoadMaps/blob/main/Plots/ParisDark.png?raw=true){width=50%}
 
 ## Save
 
 Now to save the plot. Don't forget to change the file name.
 
-``` {r save}
+``` {r save, eval = FALSE}
 ggsave(filename = "ParisDark.png", plot = p, height = 3, width = 3, units = "in", dpi = 500)
 
 beep("coin")
